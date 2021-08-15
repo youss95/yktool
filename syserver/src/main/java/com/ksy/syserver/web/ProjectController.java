@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ksy.syserver.domain.Project;
+import com.ksy.syserver.service.MapValidationErrorService;
 import com.ksy.syserver.service.ProjectService;
 
 @RestController
@@ -25,18 +26,14 @@ public class ProjectController {
 
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	MapValidationErrorService mapValidationService;
 	//bindingresult = 에러가 있는지 없는지 
 	@PostMapping("")
 	public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project,BindingResult result){
-		if(result.hasErrors()) {
-			//field와 message 꺼내기
-			Map<String,String> errorMap = new HashMap<>();
-			for(FieldError error : result.getFieldErrors()) {
-				errorMap.put(error.getField(), error.getDefaultMessage());
-			}
-			return new ResponseEntity<Map<String,String>>(errorMap,HttpStatus.BAD_REQUEST);
-		}
 		
+		ResponseEntity<?> errorMap = mapValidationService.MapValidationService(result);
+		if(errorMap!=null) return errorMap;
 		
 		
 		Project project1 = projectService.saveOrUpdateProject(project);
