@@ -28,10 +28,12 @@ public class Project {
 	private Long id;
 	@NotBlank(message = "이름을 입력하세요")
 	private String projectName;
+	
 	@NotBlank(message = "식별자 필요")
 	@Size(min=4, max=5,message = "4 에서 5글자")
-	@Column(updatable = false,unique = true)
+	@Column(updatable = false, unique = true)
 	private String projectIdentifier;
+	
 	@NotBlank(message = "빈 칸 은 노노")
 	private String description;
 	@JsonFormat(pattern="yyyy-mm-dd")

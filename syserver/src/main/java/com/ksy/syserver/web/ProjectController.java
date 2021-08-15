@@ -31,7 +31,7 @@ public class ProjectController {
 	//bindingresult = 에러가 있는지 없는지 
 	@PostMapping("")
 	public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project,BindingResult result){
-		
+		//id 유니크 에러를 잡지 못하는 이유: mapValidationService는 데이터베이스 체크가 불가능 해서 바로 세이브된다 ->  커스텀 익셉션을 만들자
 		ResponseEntity<?> errorMap = mapValidationService.MapValidationService(result);
 		if(errorMap!=null) return errorMap;
 		
