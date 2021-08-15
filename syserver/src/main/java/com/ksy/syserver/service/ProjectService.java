@@ -23,5 +23,35 @@ public class ProjectService {
 		}
 	
 	}
+	public Project findProjectByIdentifier(String projectId) {
+		
+		Project project = projectRepository.findByProjectIdentifier(projectId);
+		if(project == null) {
+			throw new ProjectIdException("id: "+projectId+"가 존재하지 않습니다.");
+		}else {
+		return project;
+		}
+	}
+	//iterable : findall 이나 list를 찾을대 그 데이터를 추출
+	public Iterable<Project> findAllProjects(){
+		return projectRepository.findAll();
+	}
 	
+	public void deleteProjectById(String projectId) {
+		Project project = projectRepository.findByProjectIdentifier(projectId);
+		
+		if(project == null) {
+			throw new ProjectIdException("id: "+projectId+" 로는 삭제가 불가능 합니다.");
+		}
+		
+		projectRepository.delete(project);
+	}
+	
+	public void updateById(String projectId,Project project) {
+		Project updateProject = projectRepository.findByProjectIdentifier(projectId);
+		updateProject.setDescription(project.getDescription());
+		updateProject.setProjectName(project.getProjectName());
+		
+		projectRepository.save(updateProject);
+	}
 }
