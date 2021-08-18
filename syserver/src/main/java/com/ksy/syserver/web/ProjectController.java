@@ -47,6 +47,7 @@ public class ProjectController {
 	}
 	//find는 못찾아도 에러가 아님 200을 리턴
 	@GetMapping("/{projectId}")
+	@CrossOrigin
 	public ResponseEntity<?> getProjectById(@PathVariable String projectId){
 		Project project = projectService.findProjectByIdentifier(projectId);
 		
@@ -54,17 +55,20 @@ public class ProjectController {
 	}
 	
 	@GetMapping("/all")
+	@CrossOrigin
 	public Iterable<Project> getAllProject(){
 		return projectService.findAllProjects();
 	}
 	
 	@DeleteMapping("/{projectId}")
+	@CrossOrigin
 	public ResponseEntity<?> deleteProjectById(@PathVariable String projectId){
 		projectService.deleteProjectById(projectId);
 		return new ResponseEntity<String>("삭제가 되었습니다.",HttpStatus.OK);
 	}
 	
 	@PutMapping("/{projectId}")
+	@CrossOrigin
 	public ResponseEntity<?> updateProjectById(@PathVariable String projectId, @RequestBody Project project){
 		projectService.updateById(projectId,project);
 		return new ResponseEntity<String>("수정 완료",HttpStatus.OK);

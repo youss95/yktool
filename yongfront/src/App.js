@@ -6,6 +6,7 @@ import { Route, Router } from "react-router-dom";
 import Addproject from "./components/projects/Addproject";
 import { Provider } from "react-redux";
 import store from "./store";
+import UpdateProject from "./components/projects/UpdateProject";
 
 function App() {
   return (
@@ -14,6 +15,11 @@ function App() {
         <Header />
         <Route path="/dashboard" exact={true} component={Dashboard} />
         <Route path="/addProject" exact={true} component={Addproject} />
+        <Route
+          path="/updateProject/:id"
+          exact={true}
+          component={UpdateProject}
+        />
       </div>
     </Provider>
   );

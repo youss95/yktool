@@ -51,7 +51,8 @@ public class ProjectService {
 		Project updateProject = projectRepository.findByProjectIdentifier(projectId);
 		updateProject.setDescription(project.getDescription());
 		updateProject.setProjectName(project.getProjectName());
-		
+		updateProject.setStart_date(project.getStart_date());
+		updateProject.setEnd_date(project.getEnd_date());
 		projectRepository.save(updateProject);
 	}
 }
