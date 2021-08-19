@@ -64,7 +64,7 @@ public class ProjectController {
 	@CrossOrigin
 	public ResponseEntity<?> deleteProjectById(@PathVariable String projectId){
 		projectService.deleteProjectById(projectId);
-		return new ResponseEntity<String>("삭제가 되었습니다.",HttpStatus.OK);
+		return new ResponseEntity<String>("ok",HttpStatus.OK);
 	}
 	
 	@PutMapping("/{projectId}")

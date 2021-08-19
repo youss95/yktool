@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
 const UpdateProject = (props) => {
   const id = props.match.params.id; //projectIdentifier
 
@@ -11,12 +10,13 @@ const UpdateProject = (props) => {
     start_date: "",
     end_date: "",
   });
-  console.log("ㄴㄴ");
+  const [nullCheck, setNullCheck] = useState(false);
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/project/" + id)
+      .get("/api/project/" + id)
       .then((res) => {
         console.log(res.data);
+        console.log(res.status);
         setDashboard(res.data);
       })
       .catch((err) => {
@@ -37,17 +37,22 @@ const UpdateProject = (props) => {
     const headers = {
       "Content-Type": "application/json;charset=utf-8",
     };
-
+    if (!dashboard.projectName) {
+      alert("이름 써줘");
+      setNullCheck(true);
+    } else if (dashboard.projectName !== null) {
+      setNullCheck(false);
+    }
     axios
-      .put("http://localhost:8080/api/project/" + id, dashboard, { headers })
+      .put("/api/project/" + id, dashboard, { headers })
       .then((res) => {
         console.log(res.data);
+        console.log(res.status);
         setDashboard(res.data);
         props.history.push("/");
       })
-
       .catch((err) => {
-        console.log(err);
+        console.log("에러", err);
       });
   };
 
@@ -69,6 +74,7 @@ const UpdateProject = (props) => {
                     onChange={changeValue}
                     value={dashboard.projectName || ""}
                   />
+                  {nullCheck && <div>경고</div>}
                 </div>
                 <div className="form-group">
                   <input

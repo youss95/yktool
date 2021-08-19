@@ -1,8 +1,28 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { withRouter, Link } from "react-router-dom";
 
 const ProjectsItem = (props) => {
   const { projectName, projectIdentifier, description } = props.dashboard;
+
+  const deleteDashboard = () => {
+    if (window.confirm("정말로 삭제하시겠습니까?")) {
+      axios
+        .delete(`/api/project/${projectIdentifier}`)
+        .then((res) => {
+          console.log(res.data);
+          if (res.data === "ok") {
+            window.location.replace("/dashboard");
+          } else {
+            alert("ff");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("에러");
+        });
+    }
+  };
+
   return (
     <div>
       <div className="container">
@@ -27,11 +47,13 @@ const ProjectsItem = (props) => {
                     <i className="fa fa-edit pr-1"> Update Project Info</i>
                   </li>
                 </Link>
-                <a href="">
-                  <li className="list-group-item delete">
-                    <i className="fa fa-minus-circle pr-1"> Delete Project</i>
-                  </li>
-                </a>
+
+                <li
+                  className="list-group-item delete"
+                  onClick={deleteDashboard}
+                >
+                  <i className="fa fa-minus-circle pr-1"> Delete Project</i>
+                </li>
               </ul>
             </div>
           </div>
@@ -41,5 +63,4 @@ const ProjectsItem = (props) => {
   );
 };
 
-export default ProjectsItem;
-<h1>project item</h1>;
+export default withRouter(ProjectsItem);
