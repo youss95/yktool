@@ -35,7 +35,6 @@ public class ProjectController {
 	MapValidationErrorService mapValidationService;
 	//bindingresult = 에러가 있는지 없는지 
 	@PostMapping("")
-	@CrossOrigin
 	public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project,BindingResult result){
 		//id 유니크 에러를 잡지 못하는 이유: mapValidationService는 데이터베이스 체크가 불가능 해서 바로 세이브된다 ->  커스텀 익셉션을 만들자
 		ResponseEntity<?> errorMap = mapValidationService.MapValidationService(result);
@@ -47,7 +46,6 @@ public class ProjectController {
 	}
 	//find는 못찾아도 에러가 아님 200을 리턴
 	@GetMapping("/{projectId}")
-	@CrossOrigin
 	public ResponseEntity<?> getProjectById(@PathVariable String projectId){
 		Project project = projectService.findProjectByIdentifier(projectId);
 		
@@ -55,23 +53,20 @@ public class ProjectController {
 	}
 	
 	@GetMapping("/all")
-	@CrossOrigin
 	public Iterable<Project> getAllProject(){
 		return projectService.findAllProjects();
 	}
 	
 	@DeleteMapping("/{projectId}")
-	@CrossOrigin
 	public ResponseEntity<?> deleteProjectById(@PathVariable String projectId){
 		projectService.deleteProjectById(projectId);
 		return new ResponseEntity<String>("ok",HttpStatus.OK);
 	}
 	
 	@PutMapping("/{projectId}")
-	@CrossOrigin
 	public ResponseEntity<?> updateProjectById(@PathVariable String projectId, @RequestBody Project project){
-		projectService.updateById(projectId,project);
-		return new ResponseEntity<String>("수정 완료",HttpStatus.OK);
+		Project updateProject = projectService.updateById(projectId,project);
+		return new ResponseEntity<Project>(updateProject,HttpStatus.OK);
 	}
 	
 }
