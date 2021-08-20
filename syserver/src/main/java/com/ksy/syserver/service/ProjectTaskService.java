@@ -61,4 +61,41 @@ public class ProjectTaskService {
 		return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
 	}
 	
+	public ProjectTask findByProjectSequence(String backlog_id,String pt_id) {
+		
+		//존재하는 backlog 여야 한다.
+		Backlog backlog = backlogRepository.findByProjectIdentifier(backlog_id);
+		if(backlog == null) {
+			throw new ProjectNotFoundException(" id :"+backlog_id+" 존재하지 않습니다.");
+		}
+		//task도 존재해야 한다.
+		ProjectTask projectTask = projectTaskRepository.findByProjectSequence(pt_id);
+		if(projectTask == null) {
+			throw new ProjectNotFoundException("id :"+pt_id+" 존재하지 않습니다.");
+		}
+		//매칭이 되어야한다.
+		if(!projectTask.getProjectIdentifier().equals(backlog_id)) {
+			throw new ProjectNotFoundException("프로젝트 아이디하고 url아이디가 매칭 되지 않는다."); //not related each other
+		}
+		
+		return projectTask;
+		
+		
+	}
+	
+	public ProjectTask updateByProjectSequence(ProjectTask updateTask,String backlog_id, String pt_id) {
+		ProjectTask projectTask = findByProjectSequence(backlog_id, pt_id);
+		projectTask = updateTask;
+		return projectTaskRepository.save(projectTask);
+	}
+	
+	public void deletePTByPs(String backlog_id,String pt_id) {
+		ProjectTask projectTask = findByProjectSequence(backlog_id, pt_id);
+		/*
+		 * Backlog backlog = projectTask.getBacklog(); List<ProjectTask> pts =
+		 * projectTask.getBacklog().getProjectTasks(); pts.remove(projectTask);
+		 * backlogRepository.save(backlog);
+		 */
+		projectTaskRepository.delete(projectTask);
+	}
 }

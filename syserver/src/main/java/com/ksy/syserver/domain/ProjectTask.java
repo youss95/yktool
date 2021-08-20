@@ -15,6 +15,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -30,7 +31,7 @@ public class ProjectTask {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(updatable = false)
+	@Column(updatable = false, unique = true)
 	private String projectSequence;
 	@NotBlank(message = "빈 칸은 안됨")
 	private String summary;
@@ -39,13 +40,14 @@ public class ProjectTask {
 	private Integer priority;
 	private Date dueDate;
 	//many to one with backlog
-	@ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.REFRESH)
+	@ManyToOne(fetch = FetchType.EAGER) //refresh는 현재 엔티티 상태를 삭제하고 디비에서 로드된 상태를 사용해 재정의
 	@JoinColumn(name="backlog_id",updatable = false, nullable = false)
 	@JsonIgnore
 	private Backlog backlog;
 	@Column(updatable = false)
 	private String projectIdentifier;
 	private Date create_At;
+	@JsonFormat(pattern="yyyy-mm-dd")
 	private Date update_At;
 	
 	
@@ -58,6 +60,6 @@ public class ProjectTask {
 	
 	@PreUpdate
 	protected void onUpdate() {
-		this.create_At = new Date();
+		this.update_At = new Date();
 	}
 }

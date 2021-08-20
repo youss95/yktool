@@ -39,7 +39,9 @@ public class Backlog {
 	@JsonIgnore //child side에서 추가
 	private Project project;
 	//onetomany 1 project many tasks
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "backlog")
+	//orphanremove : 부모엔티티와 연관관계가 끊어진 엔티티를 자동 삭제 없으면 delete by id가 안됨
+	//-> id(부모가 삭제 되면) 연결되 있는 sequence(자식)들이 관계가 다 끊김
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH, mappedBy = "backlog",orphanRemoval = true)
 	private List<ProjectTask> projectTasks = new ArrayList<>();
 	
 	
