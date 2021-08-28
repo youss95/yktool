@@ -38,6 +38,7 @@ public class ProjectTask {
 	private String acceptanceCriteria;
 	private String status;
 	private Integer priority;
+	@JsonFormat(pattern="yyyy-mm-dd")
 	private Date dueDate;
 	//many to one with backlog
 	@ManyToOne(fetch = FetchType.EAGER) //refresh는 현재 엔티티 상태를 삭제하고 디비에서 로드된 상태를 사용해 재정의
