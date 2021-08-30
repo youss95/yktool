@@ -1,5 +1,6 @@
+import axios from "axios";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 const ProjectTask = (props) => {
   const {
@@ -22,6 +23,27 @@ const ProjectTask = (props) => {
     priorityClass = "bg-success text-light";
     priorityString = "LOW";
   }
+
+  const deleteTask = () => {
+    if (window.confirm("정말로 삭제?")) {
+      axios
+        .delete(
+          `http://localhost:8080/api/backlog/${projectIdentifier}/${projectSequence}`
+        )
+        .then((res) => {
+          console.log(res.status);
+          if (res.status === 200) {
+            props.history.push("/");
+          } else {
+            alert("삭제 실패");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   return (
     <div>
       <div className="card mb-1 bg-light">
@@ -41,11 +63,13 @@ const ProjectTask = (props) => {
             View / Update
           </Link>
 
-          <button className="btn btn-danger ml-4">Delete</button>
+          <button className="btn btn-danger ml-4" onClick={deleteTask}>
+            Delete
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-export default ProjectTask;
+export default withRouter(ProjectTask);
